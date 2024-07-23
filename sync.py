@@ -19,8 +19,8 @@ class Repo:
 def all_repos():
     """Read .gitmodules and return Repo list"""
     start_pattern = re.compile(r'\[submodule')
-    path_pattern = re.compile(r'\s+path = (\S+)')
-    url_pattern = re.compile(r'\s+url = (\S+)')
+    path_pattern = re.compile(r'\s*path = (\S+)')
+    url_pattern = re.compile(r'\s*url = (\S+)')
 
     repos = []
     current = None
