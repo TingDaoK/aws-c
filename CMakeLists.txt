@@ -12,10 +12,13 @@ if(UNIX AND NOT APPLE)
     set(BUILD_TESTING OFF)
 
     if(NOT USE_OPENSSL)
-        set(BUILD_LIBSSL OFF) # only build libcrypto, don't build libssl
-        set(DISABLE_GO ON) # don't run codegen
-        set(DISABLE_PERL ON) # don't run codegen
-        add_subdirectory(aws-lc)
+        # s2n-tls uses libcrypto during its configuration, so we need to prebuild aws-lc.
+        include(AwsPrebuildDependency)
+        aws_prebuild_dependency(
+            DEPENDENCY_NAME AWSLC
+            SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/aws-lc
+            CMAKE_ARGUMENTS "-DBUILD_LIBSSL=OFF;-DBUILD_TESTING=OFF;-DDISABLE_GO=ON;-DDISABLE_PERL=ON"
+        )
     endif()
 
     set(UNSAFE_TREAT_WARNINGS_AS_ERRORS OFF) # disable warnings-as-errors when building s2n
